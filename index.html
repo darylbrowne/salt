@@ -82428,7 +82428,7 @@ function convertBase(value, from_base, to_base) {
 					document.body.innerHTML = scrolls;
 					qr();
 					setTimeout(function () {window.scrollTo(0,1);},1);
-					if (window.location.hostname && !isType) {
+					if (!(window.location.hostname).includes('s-a.lt') && !isType) {
 						document.getElementById('theDay').selectedIndex = (todaysDate.getDate()-1);
 						document.getElementById('theMonth').selectedIndex = todaysDate.getMonth();
 					}
