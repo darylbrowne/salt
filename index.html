@@ -37,6 +37,7 @@
 	<link rel="apple-touch-icon-precomposed" href="images/be-icon.png" />-->
 	<script type="text/javascript">
 
+		const app = 's-a.lt';
 		let cause1 = [],
 			effect2 = [],
 			intent3 = [],
@@ -473,7 +474,18 @@
 				right: 0;
 				top: 37%;
 			}
-			section.scrolls.art article {
+			.sign  canvas {
+				display: none;
+			}
+			canvas#qrcode, .sign i.fa {
+				display: inline-block;
+				vertical-align: middle;
+				height: 1.3em;
+				width: 1.3em;
+				position: relative;
+			}
+
+			section.scrolls.wall article {
 				width: 33%;
 			}
 			body{
@@ -595,10 +607,10 @@
 			section article > div {
 				margin-top: 15px;
 			}
-			section:not(.all):not(.script):not(.ads) sup {
+			section:not(.todo):not(.script):not(.promo) sup {
 				display: none;
 			}
-			.ads sup {
+			.promo sup {
 				position: relative;
 			    top: 0;
 			    left: 0;
@@ -795,7 +807,7 @@
 			    margin-top: .1em;
 			    display: inline-block;
 			}
-			.nft {
+			.app {
 				font-variant: small-caps;
 				letter-spacing: .3em;
 				color: #edd1c6;
@@ -819,7 +831,7 @@
 				vertical-align: bottom;
 			}
 			pre, section:not(.cover),
-			section.art sup {
+			section.wall sup {
 				display: none;
 			}
 			section.scrolls a:nth-child(odd) article p::after, 
@@ -883,6 +895,14 @@ Pick a scroll, one last little pinch of salt.
 </head>
 <body>
 <pre>
+Take a moment...
+
+Pause. Unroll it.
+
+<canvas id="qrcode"></canvas> to <i class="fa fa-assistive-listening-systems" aria-hidden="true"></i> via <i class="fa fa-mobile" aria-hidden="true"></i>
+
+
+
 Yesterdays and tomorrows lack guarantees,
 
 Which makes your today all the more free:
@@ -81618,17 +81638,21 @@ function convertBase(value, from_base, to_base) {
   var range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
   var from_range = range.slice(0, from_base);
   var to_range = range.slice(0, to_base);
-  
-  var dec_value = value.split('').reverse().reduce(function (carry, digit, index) {
-    if (from_range.indexOf(digit) === -1) throw new Error('Invalid digit `'+digit+'` for base '+from_base+'.');
-    return carry += from_range.indexOf(digit) * (Math.pow(from_base, index));
-  }, 0);
-  
-  var new_value = '';
-  while (dec_value > 0) {
-    new_value = to_range[dec_value % to_base] + new_value;
-    dec_value = (dec_value - (dec_value % to_base)) / to_base;
+  var dec_value = value || null;
+  var new_value ;
+
+  if (value) {
+	  	value.split('').reverse().reduce(function (carry, digit, index) {
+	    if (from_range.indexOf(digit) === -1) throw new Error('Invalid digit `'+digit+'` for base '+from_base+'.');
+	    return carry += from_range.indexOf(digit) * (Math.pow(from_base, index));
+	  }, 0);
+
+	  while (dec_value > 0) {
+	    new_value = to_range[dec_value % to_base] + new_value;
+	    dec_value = (dec_value - (dec_value % to_base)) / to_base;
+	  }
   }
+  
   return new_value || '0';
 }
 
@@ -81762,20 +81786,24 @@ function convertBase(value, from_base, to_base) {
 				console.log('test conversion 1 = ' + convertBase(yy, 23, 10));
 				console.log('test conversion 2 = ' + convertBase(zz.toString(), 10, 23));
 			}
-				
-			const supQRs = document.querySelectorAll("sup");
-			for(let i = 0; i < supQRs.length; i++){
-				let qr_p = document.createElement("canvas");
-					qr_p.setAttribute("title", "qr_"+i);
-					qr_p.setAttribute("id", "qr_"+i);
-					document.querySelectorAll("sup")[i].after(qr_p);
-			}
 
-			for(let i = 0; i < supQRs.length; i++){
-			  let rawOne = supQRs[i].innerText;
-			  let encOne = convertBase(rawOne, 10, 23);
-			  let salty = 'http://s-a.lt#' + encOne;
-			  new QRious({element: document.getElementById('qr_'+i),value: salty});
+			const supQRs = document.querySelectorAll("sup");
+
+			if (supQRs.length < 100) {
+				for(let i = 0; i < supQRs.length; i++){
+					let qr_p = document.createElement("canvas");
+						qr_p.setAttribute("title", "qr_"+i);
+						qr_p.setAttribute("id", "qr_"+i);
+						document.querySelectorAll("sup")[i].after(qr_p);
+				}
+
+				for(let i = 0; i < supQRs.length; i++){
+				  let rawOne = supQRs[i].innerText;
+				  let encOne = convertBase(rawOne, 10, 23);
+				  let salty = 'http://' + app + '?' + encOne;
+				  new QRious({element: document.getElementById('qr_'+i),value: salty});
+				}
+
 			}
 
 		}
@@ -81816,8 +81844,8 @@ function convertBase(value, from_base, to_base) {
 			"hex"	: "#522613"
 		}
 	];
-	const modes = ['~', 'ads', 'all', 'art', 'audiobook', 'book1', 'book2', 'book3', 'frame', 'labels', 'policy', 'sign', 'script', 'scrolls', 'uniques'];
-	const startAt = 5;
+	const modes = ['~', 'promo', 'todo', 'wall', 'audiobook', 'book1', 'book2', 'book3', 'flag', 'frame', 'labels', 'policy', 'sign', 'script', 'scrolls', 'uniques'];
+	const startAt = 6;
 
 	var local = false;
 	var shades = [];
@@ -82173,7 +82201,7 @@ function convertBase(value, from_base, to_base) {
 					  return yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
 					}
 
-					if (isNaN(hash) && isNaN(qstr)) {
+					if (isNaN(hash)) {
 						isType = hash;
 						let thisSide = wisdom;
 						for (scroll = 0; scroll < thisSide.length; scroll++) {
@@ -82205,8 +82233,14 @@ function convertBase(value, from_base, to_base) {
 
 					}
 
-					if (modes.includes(isType) || (location.search && isNaN(convertBase(my.strQuery(),23,10)))) {
+					console.log('I. modes.includes(isType) : ' + modes.includes(isType));
+					console.dir(modes);
+					console.dir(isType);
+					console.log('II. location.search : ' + location.search);
+					console.log('III. isNaN(convertBase(my.strQuery(),23,10)) : ' + isNaN(convertBase(my.strQuery(),23,10)));
 
+					if (modes.includes(isType) || (location.search && isNaN(convertBase(my.strQuery(),23,10)))) {
+					//if (modes.includes(isType)) {
 						console.log('-----(modes.includes(isType) || (location.search && isNaN(convertBase(my.strQuery(),23,10))))');
 						document.getElementById("screen").remove();
 						let r = document.querySelector(':root');
@@ -82214,7 +82248,7 @@ function convertBase(value, from_base, to_base) {
 						r.style.setProperty('--shade', 'black');
 
 						switch (isType) {
-							case 'all' :
+							case 'todo' :
 								pages = pages.slice(startAt).reverse();
 								scrolls = "<section class='scrolls " + isType + "'>" + pages.join("") + "</section>";
 								break;
@@ -82371,18 +82405,21 @@ function convertBase(value, from_base, to_base) {
 								pages = pages.slice(startAt);
 								scrolls = "<section class='scrolls " + isType + "'>" + pages.join("") + "</section>";
 								break;
-							case 'sign' :
-								scrolls = "<section class='scrolls sign'>" + pages[2] + "</section>";
+							case 'flag' :
+								scrolls = "<section class='scrolls sign'>" + pages[0] + "</section>";
 								break;
-							case 'art' :
+							case 'sign' :
+								scrolls = "<section class='scrolls sign'>" + pages[3] + "</section>";
+								break;
+							case 'wall' :
 								var pp = 3;
 								var perpage = 15;
 								var custom = my.shuffle(pages.slice(startAt)).slice(0,perpage*pp);
-								custom[0] = pages[3];
+								custom[0] = pages[4];
 								custom[custom.length-1] = pages[pages.length-1];
 								scrolls = "<section class='scrolls " + isType + "'>" + custom.join("") + "</section>";
 								break;
-							case 'ads' :
+							case 'promo' :
 								var pp = 10;
 								var perpage = 14;
 								var custom = my.shuffle(pages.slice(startAt)).slice(0,perpage*pp);
@@ -82393,7 +82430,7 @@ function convertBase(value, from_base, to_base) {
 									return '<sup>- from <em>The ' + fDay + nth(fDay) + ' of ' + MONTHS[fMonth] + ' and Beyond</em></sup>';
 								});*/
 								blob = blob.replace(/<sup>(.*?)<\/sup>/g,function(x){
-									return '<sup><em>BirthdayZen.com</em></sup>';
+									return '<sup><em>s-a.lt?j16</em></sup>';
 								});
 
 								scrolls = "<section class='scrolls " + isType + "'>" + blob + "</section>";
@@ -82419,8 +82456,8 @@ function convertBase(value, from_base, to_base) {
 						const numMonths = Array.from(Array(12), (e,i)=>i+1);
 						const selMonths = numMonths.map(monthOptions);
 						const selDays = numDays.map(dayOptions);
-						const nft = "Get the <i>Table Salt</i> App";
-						let nav = !(window.location.hostname).includes('s-a.lt') ? "<form onsubmit='return openBook();'><span>A <i class='fa fa-gift' aria-hidden='true'></i> for their</span><select id='theMonth'>" + selMonths + "</select><select id='theDay'>" + selDays + "</select><button type='submit' name='submit'><i class='fa fa-birthday-cake' aria-hidden='true'></i></button></form>" : "<form><span class='nft'>" + nft + "<span></form>";
+						const ad = "Get the <i>Table Salt</i> App";
+						let nav = !(window.location.hostname).includes(app) ? "<form onsubmit='return openBook();'><span>A <i class='fa fa-gift' aria-hidden='true'></i> for their</span><select id='theMonth'>" + selMonths + "</select><select id='theDay'>" + selDays + "</select><button type='submit' name='submit'><i class='fa fa-birthday-cake' aria-hidden='true'></i></button></form>" : "<form><span class='app'>" + ad + "<span></form>";
 						scrolls = "<section class='scrolls cover'>" + pages[0] + nav + "</section>";
 						if (!isType && !location.search) {setInterval(my.journey,30000,true);}
 					}
@@ -82428,10 +82465,15 @@ function convertBase(value, from_base, to_base) {
 					document.body.innerHTML = scrolls;
 					qr();
 					setTimeout(function () {window.scrollTo(0,1);},1);
-					if (!(window.location.hostname).includes('s-a.lt') && !isType) {
+					if (!(window.location.hostname).includes(app) && !isType) {
 						document.getElementById('theDay').selectedIndex = (todaysDate.getDate()-1);
 						document.getElementById('theMonth').selectedIndex = todaysDate.getMonth();
 					}
+					if(document.getElementById("qrcode")){
+						console.log('A. GOT ELEMENT BY ID QRCODE');
+						new QRious({element: document.getElementById('qrcode'),value: 'http://' + app});
+					}
+
             })
       };
     my.jar();
