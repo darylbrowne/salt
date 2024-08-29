@@ -82223,7 +82223,7 @@ function convertBase(value, from_base, to_base) {
 						} else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
 						  platform = 'https://www.apple.com'; // iOS
 						} else {
-						  platform = 'https://www.windows.com'; // Windows App
+						  platform = toURL; // Windows App
 						}					
 						pages.push('<a href="' + platform + '"><article><div><p>' + my.journey() + '</p></div></article></a>');
 					} else {
@@ -82456,7 +82456,7 @@ function convertBase(value, from_base, to_base) {
 						const numMonths = Array.from(Array(12), (e,i)=>i+1);
 						const selMonths = numMonths.map(monthOptions);
 						const selDays = numDays.map(dayOptions);
-						const ad = "Get the <i>Table Salt</i> App";
+						const ad = "Get the <i>Take-a-Moment</i> App";
 						let nav = !(window.location.hostname).includes(app) ? "<form onsubmit='return openBook();'><span>A <i class='fa fa-gift' aria-hidden='true'></i> for their</span><select id='theMonth'>" + selMonths + "</select><select id='theDay'>" + selDays + "</select><button type='submit' name='submit'><i class='fa fa-birthday-cake' aria-hidden='true'></i></button></form>" : "<form><span class='app'>" + ad + "<span></form>";
 						scrolls = "<section class='scrolls cover'>" + pages[0] + nav + "</section>";
 						if (!isType && !location.search) {setInterval(my.journey,30000,true);}
