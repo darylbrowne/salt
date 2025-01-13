@@ -21,10 +21,9 @@
 	<meta name="DC.Format" content="99 kB">
 	<meta name="DC.Language" content="en">
 	<meta property="og:title" content="You're Exactly Where You're Supposed to Be" />
-	<meta property="og:description" content="You're Exactly Where You're Supposed to Be: Mindful Messages by Daryl Browne" />
+	<meta property="og:description" content="You're Exactly Where You're Supposed to Be: Mindful Messages by Daryl Browne" /><!--
 	<script src="https://kit.fontawesome.com/62418a693d.js" crossorigin="anonymous"></script>
-	<script src="https://kit.fontawesome.com/d0fa1090c0.js" crossorigin="anonymous"></script>
-	<script src="https://elevenlabs.io/player/audioNativeHelper.js" type="text/javascript"></script>	
+	<script src="https://kit.fontawesome.com/d0fa1090c0.js" crossorigin="anonymous"></script>-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
@@ -82030,8 +82029,8 @@ function convertBase(value, from_base, to_base) {
 				document.body.prepend(qr_qa);
 				encode(xx);
 
-			} else if (convertBase(xx,23,10)){
-				console.log('2.5 continued... see? ' + convertBase(xx,23,10));
+			} else if (parseInt(xx,23)){
+				console.log('2.5 continued... see? ' + parseInt(xx,23));
 			} else {
 				decode(xx);
 				let r = document.querySelector(':root');
@@ -82044,10 +82043,10 @@ function convertBase(value, from_base, to_base) {
 
 			if (yy && yy.length > 0 && yy.length < 4) {
 				//convertBase(value, from_base, to_base);
-				let zz = convertBase(yy, 23, 10);
+				let zz = parseInt(yy, 23);
 				console.log('pre-conversion = ' + yy);
 				console.log('raw conversion = ' + zz);
-				console.log('test conversion 1 = ' + convertBase(yy, 23, 10));
+				console.log('test conversion 1 = ' + parseInt(yy, 23));
 				console.log('test conversion 2 = ' + convertBase(zz.toString(), 10, 23));
 			}
 
@@ -82056,7 +82055,9 @@ function convertBase(value, from_base, to_base) {
 			if (supQRs.length < 100) {
 				for(let i = 0; i < supQRs.length; i++){
 					let qr_p = document.createElement("canvas");
-						qr_p.setAttribute("title", "qr_"+i);
+					let qa_a = convertBase((supQRs[i].innerText), 10, 23);
+					let qa_b = parseInt(qa_a.toString(), 23);
+						qr_p.setAttribute("title", "qr_"+ i + "=" + supQRs[i].innerText + "|" + qa_a + "|" + qa_b);
 						qr_p.setAttribute("id", "qr_"+i);
 						document.querySelectorAll("sup")[i].after(qr_p);
 				}
@@ -82064,8 +82065,9 @@ function convertBase(value, from_base, to_base) {
 				for(let i = 0; i < supQRs.length; i++){
 				  let rawOne = supQRs[i].innerText;
 				  let encOne = convertBase(rawOne, 10, 23);
+				  let decOne = parseInt(encOne.toString(), 23);
 				  let salty = 'http://' + app + '?' + encOne;
-				  console.log('rawone = ' + rawOne + ' | rawOne.length = ' + rawOne.length+ ' encOne = ' + encOne + ' | salty = ' + salty);
+				  console.log('rawone = ' + rawOne + ' | rawOne.length = ' + rawOne.length+ ' encOne = ' + encOne + ' | salty = ' + salty + ' | decoded = ' + decOne);
 				  new QRious({foreground: '#522613',backgroundAlpha: 0,element: document.getElementById('qr_'+i),value: salty});
 				}
 
@@ -82394,7 +82396,7 @@ function convertBase(value, from_base, to_base) {
 					console.log('my.journey(' + inner + ')');
 					let fate, message, toggle;
 					let hash = Number((location.hash).substring(1)) || location.hash;
-					let quer = Number(convertBase((location.search).substring(1),23,10)) || location.search;
+					let quer = Number(parseInt((location.search).substring(1),23)) || location.search;
 					let shade = my.shade();
 				  const element = document.getElementsByTagName("p")[0];
 					document.body.style.setProperty('--shade', shade['hex']);						
@@ -82509,11 +82511,11 @@ function convertBase(value, from_base, to_base) {
 					console.dir(modes);
 					console.dir(isType);
 					console.log('II. location.search : ' + location.search);
-					console.log('III. isNaN(convertBase(my.strQuery(),23,10)) : ' + isNaN(convertBase(my.strQuery(),23,10)));
+					console.log('III. isNaN(parseInt(my.strQuery(),23)) : ' + isNaN(parseInt(my.strQuery(),23)));
 
-					if (modes.includes(isType) || (location.search && isNaN(convertBase(my.strQuery(),23,10)))) {
+					if (modes.includes(isType) || (location.search && isNaN(parseInt(my.strQuery(),23)))) {
 					//if (modes.includes(isType)) {
-						console.log('-----(modes.includes(isType) || (location.search && isNaN(convertBase(my.strQuery(),23,10))))');
+						console.log('-----(modes.includes(isType) || (location.search && isNaN(cparseInt(my.strQuery(),23)))');
 						document.getElementById("screen").remove();
 						let r = document.querySelector(':root');
 						r.style.setProperty('--background', 'white');
@@ -82727,7 +82729,7 @@ function convertBase(value, from_base, to_base) {
 
 					} else {
 
-						console.log('-----NOT (modes.includes(isType) || (location.search && isNaN(convertBase(my.strQuery(),23,10))))');
+						console.log('-----NOT (modes.includes(isType) || (location.search && isNaN(parseInt(my.strQuery(),23)))');
 
 						function dayOptions(numDay) {return '<option value=\"' + numDay + '\">' + numDay + nth(numDay) + '</option>';}
 						function monthOptions(numMonth) {return '<option value=\"' + numMonth + '\">' + (MONTHS[numMonth-1]).substr(0,3) + '</option>';}
